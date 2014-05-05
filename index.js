@@ -3,6 +3,7 @@
  */
 require('es5-shim');
 var Emitter = require('events').EventEmitter;
+var util = require('util');
 var debug = require('debug')('pubsub');
 var humane = require('humane-js');
 var io = require('socket.io-client');
@@ -31,8 +32,6 @@ function Subscriber(channel, opts) {
 
   opts = opts || {};
 
-  Emitter.call(this);
-
   this.channel = channel;
   this.namespace = opts.namespace || 'notifications';
 
@@ -55,6 +54,8 @@ function Subscriber(channel, opts) {
   this.addMessageType('info');
   this.addMessageType('success');
 }
+
+util.inherits(Subscriber, Emitter);
 
 /**
  * Add a new message type for humane.js to display

@@ -123,7 +123,8 @@ Subscriber.prototype._onMessage = function (msg) {
  * @return {[type]}        [description]
  */
 Subscriber.prototype._onConnectFailed = function (reason) {
-  this.emit('unauthorized', 'Unable to connect to namespace ' + reason);
+  debug('Unable to connect to namespace `'+this.namespace+'`: '+reason);
+  this.emit('unauthorized', 'Unauthorized');
 };
 
 /**
@@ -131,7 +132,8 @@ Subscriber.prototype._onConnectFailed = function (reason) {
  * @param  {String} channel Channel id that failed authorization
  */
 Subscriber.prototype._onUnauthorizedChannel = function (channel) {
-  this.emit('unauthorized', 'Unauthorized for channel '+channel);
+  debug('unauthorized for channel '+channel);
+  this.emit('unauthorized', 'Unauthorized');
 };
 
 /**

@@ -13,7 +13,7 @@ module.exports = function (theme, fn) {
     return;
   }
 
-  fs.readFile(path.join(__dirname, path.dirname(require.resolve('humane-js')), 'themes', theme), 'utf8', function (err, css) {
+  fs.readFile(path.join(path.dirname(require.resolve('humane-js')), 'themes', theme + '.css'), 'utf8', function (err, css) {
     if(err) return fn(err);
 
     cache[theme] = css;

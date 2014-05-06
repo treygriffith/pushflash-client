@@ -94,6 +94,7 @@ Subscriber.prototype._onConnect = function () {
  * Listen for `disconnect`
  */
 Subscriber.prototype._onDisconnect = function () {
+  this.lostConnection = true;
   this.emit('error', 'Disconnected from host');
 };
 
@@ -150,5 +151,9 @@ Subscriber.prototype._onError = function (err) {
  * @param  {String} channel Channel id
  */
 Subscriber.prototype._onChannelSet = function (channel) {
+  if(this.lostConnection) {
+    this.lostConnection = false;
+    this.emit('success', 'Reconnected to host');
+  }
   debug('subscribed to channel '+channel);
 };

@@ -4,7 +4,7 @@
 require('es5-shim');
 var Emitter = require('events').EventEmitter;
 var util = require('util');
-var debug = require('debug')('pubsub');
+var debug = require('debug')('pushflash');
 var humane = require('humane-js');
 var io = require('socket.io-client');
 

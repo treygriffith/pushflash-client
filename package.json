@@ -1,6 +1,6 @@
 {
   "name": "pushflash-client",
-  "version": "0.0.5",
+  "version": "0.1.0",
   "description": "Client script for Pushflash",
   "main": "index.js",
   "scripts": {

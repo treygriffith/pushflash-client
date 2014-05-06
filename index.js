@@ -42,7 +42,7 @@ function Subscriber(channel, opts) {
   this.io.on('channel set', this._onChannelSet.bind(this));
 
   // humane message instantiation
-  this.baseClass = opts.baseClass || 'humane-flatty';
+  this.baseClass = opts.baseClass || 'humane-jackedup';
 
   this.addMessageType('error');
   this.addMessageType('unauthorized', 'error');

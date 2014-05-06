@@ -22,7 +22,7 @@ module.exports = Subscriber;
  */
 function Subscriber(channel, opts) {
   if(!(this instanceof Subscriber)) {
-    return new Subscriber(namespace, channel);
+    return new Subscriber(channel, opts);
   }
 
   if(namespace && typeof namespace === 'object' && !opts) {

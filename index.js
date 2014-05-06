@@ -25,17 +25,12 @@ function Subscriber(channel, opts) {
     return new Subscriber(channel, opts);
   }
 
-  if(namespace && typeof namespace === 'object' && !opts) {
-    opts = namespace;
-    namespace = null;
-  }
-
   opts = opts || {};
 
   this.channel = channel;
   this.namespace = opts.namespace || 'notifications';
 
-  this.io = io.connect('/' + namespace);
+  this.io = io.connect('/' + this.namespace);
 
   // socket.io listeners
   this.io.on('connect', this._onConnect.bind(this));

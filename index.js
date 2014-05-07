@@ -33,13 +33,17 @@ function Subscriber(channel, opts) {
   this.io = io.connect('/' + this.namespace);
 
   // socket.io listeners
+  this.io.on('connecting', this._onConnecting.bind(this));
   this.io.on('connect', this._onConnect.bind(this));
   this.io.on('disconnect', this._onDisconnect.bind(this));
-  this.io.on('message', this._onMessage.bind(this));
   this.io.on('connect_failed', this._onConnectFailed.bind(this));
   this.io.on('unauthorized channel', this._onUnauthorizedChannel.bind(this));
   this.io.on('error', this._onError.bind(this));
+  this.io.on('reconnecting', this._onReconnecting.bind(this));
+  this.io.on('reconnect', this._onReconnect.bind(this));
+
   this.io.on('channel set', this._onChannelSet.bind(this));
+  this.io.on('message', this._onMessage.bind(this));
 
   // humane message instantiation
   this.baseClass = opts.baseClass || 'humane-jackedup';
@@ -94,8 +98,21 @@ Subscriber.prototype._onConnect = function () {
  * Listen for `disconnect`
  */
 Subscriber.prototype._onDisconnect = function () {
-  this.lostConnection = true;
-  this.emit('error', 'Disconnected from host');
+  this.emit('error', 'Disconnected');
+};
+
+/**
+ * Listen for `reconnecting`
+ */
+Subscriber.prototype._onReconnecting = function () {
+  this.emit('info', 'Attempting to reconnect...');
+};
+
+/**
+ * Listen for `reconnect`
+ */
+Subscriber.prototype._onReconnect = function () {
+  this.emit('success', 'Reconnected');
 };
 
 /**
@@ -142,7 +159,13 @@ Subscriber.prototype._onUnauthorizedChannel = function (channel) {
  * @param  {Error} err error emitted
  */
 Subscriber.prototype._onError = function (err) {
-  this.emit('error', err);
+  if(err instanceof Event) {
+    // websocket error, socket.io will try other transports
+    debug('websocket error encountered');
+    debug(Event);
+  } else {
+    this.emit('error', err);
+  }
 };
 
 /**
@@ -151,9 +174,5 @@ Subscriber.prototype._onError = function (err) {
  * @param  {String} channel Channel id
  */
 Subscriber.prototype._onChannelSet = function (channel) {
-  if(this.lostConnection) {
-    this.lostConnection = false;
-    this.emit('success', 'Reconnected to host');
-  }
   debug('subscribed to channel '+channel);
 };

@@ -86,6 +86,10 @@ Subscriber.prototype.setChannel = function (id) {
   this.io.emit('set channel', id);
 };
 
+Subscriber.prototype._onConnecting = function () {
+  debug('connecting to host');
+};
+
 /**
  * Listen for `connect`
  */
@@ -98,6 +102,7 @@ Subscriber.prototype._onConnect = function () {
  * Listen for `disconnect`
  */
 Subscriber.prototype._onDisconnect = function () {
+  debug('disconnected from host');
   this.emit('error', 'Disconnected');
 };
 
@@ -105,6 +110,7 @@ Subscriber.prototype._onDisconnect = function () {
  * Listen for `reconnecting`
  */
 Subscriber.prototype._onReconnecting = function () {
+  debug('reconnecting');
   this.emit('info', 'Attempting to reconnect...');
 };
 
@@ -112,6 +118,7 @@ Subscriber.prototype._onReconnecting = function () {
  * Listen for `reconnect`
  */
 Subscriber.prototype._onReconnect = function () {
+  debug('reconnected');
   this.emit('success', 'Reconnected');
 };
 
@@ -164,6 +171,8 @@ Subscriber.prototype._onError = function (err) {
     debug('websocket error encountered');
     debug(Event);
   } else {
+    debug('error encountered');
+    debug(err);
     this.emit('error', err);
   }
 };
